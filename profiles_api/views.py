@@ -103,3 +103,16 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 class UserLoginApiView(ObtainAuthToken):
     """Handles creating user authentication"""
     renderer_classes=api_settings.DEFAULT_RENDERER_CLASSES
+
+
+
+
+class UserProfileFeedViewSet(viewsets.ModelViewSet):
+    """Handles creating reading and updating user feeds"""
+    authentication_classes=(TokenAuthentication,)
+    serializer_class=serializers.ProfileFeedItemSerializer
+    queryset=models.ProfileFeedItem.objects.all()
+
+    def perform_create(self,serializer):
+        """sets user profile to logged in user"""
+        serializer.save(user_profile=self.request.user)
